@@ -14,9 +14,9 @@ def f_L(k):
     return r - 1 - 2*((2*pi*k/L)**2) + ((2*pi*k/L)**4)
     
     
-N = 1024
+N = 36
 dt = 0.05
-t_max = 0.51
+t_max = 1.01
 T = int(t_max/dt)+1
 
 x_range = np.linspace(0, L-(L/N), N)
@@ -24,6 +24,11 @@ k_range = np.arange(-N/2,N/2,1)
 fL_range = f_L(k_range)
 coef_1 = (1+(fL_range*dt/2))/(1-(fL_range*dt/2)) 
 coef_2 = dt/(1-(fL_range*dt/2))
+"""plt.plot(k_range, coef_1, label ="coef 1")
+plt.plot(k_range, coef_2, label ="coef 2")
+plt.legend()
+plt.show()
+plt.clf()"""
 
     
 def SH(f0):
@@ -32,12 +37,13 @@ def SH(f0):
     U[:,0] = u_range
     
     DFT_0 = (1/N)*np.fft.fftshift(np.fft.fft(u_range))
-    DFT = np.zeros((N,T))
+    DFT = np.zeros((N,T), dtype = complex)
+    U[:,0] = u_range
     DFT[:,0] = DFT_0
     
-    uc_range = [u**3 for u in u_range]
-    DFTc_0 = (1/N)*np.fft.fftshift(np.fft.fft(uc_range))
-    DFTc = np.zeros((N,T))
+    DFTc_0 = (1/N)*np.fft.fftshift(np.fft.fft(u_range**3))
+    DFTc = np.zeros((N,T), dtype = complex)
+    U[:,0] = u_range
     DFTc[:,0] = DFTc_0
 
     for t in range(1,T):
@@ -48,15 +54,13 @@ def SH(f0):
         else :
             dc2 = DFTc[:,t-2]
         
-        uk = coef_1*d1 + coef_2*((3/2)*dc1 - (1/2)*dc2)
+        uk = (coef_1*d1) + (coef_2*((3/2)*dc1 - (1/2)*dc2))
         
         DFT[:,t] = uk
-        u = np.fft.ifft(np.fft.ifftshift(N*uk))
+        u = np.real(np.fft.ifft(np.fft.ifftshift(N*uk)))
         U[:,t] = u
         ukc = (1/N)*np.fft.fftshift(np.fft.fft(u**3))
         DFTc[:,t] = ukc
-        
-        t += 1
         
     return U,DFT
     
@@ -74,7 +78,7 @@ plt.clf()
 
 t_range = np.arange(0,t_max, dt)
 [xx,tt]=np.meshgrid(x_range,t_range)
-plt.contourf(xx,tt, np.real(U).T)
+plt.contourf(xx,tt, U.T)
 plt.colorbar()
 plt.show()
 
