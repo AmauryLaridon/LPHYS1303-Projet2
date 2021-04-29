@@ -23,23 +23,23 @@ def f_L(k):
 
 N = 1024
 dt = 0.05
-t_max = 1.01
+t_max = 200.01
 T = int(t_max/dt) + 1
 
 x_range = np.linspace(0, L-(L/N), N)
 k_range = np.arange(-N/2,N/2,1)
 fL_range = f_L(k_range)
-plt.plot(k_range,fL_range)
+"""plt.plot(k_range,fL_range)
 plt.show()
-plt.clf()
+plt.clf()"""
 
 coef_1 = (1+(fL_range*dt/2))/(1-(fL_range*dt/2))
 coef_2 = dt/(1-(fL_range*dt/2))
-plt.plot(k_range, coef_1, label ="coef 1")
+"""plt.plot(k_range, coef_1, label ="coef 1")
 plt.plot(k_range, coef_2, label ="coef 2")
 plt.legend()
 plt.show()
-plt.clf()
+plt.clf()"""
 
 
 def SH(f0):
@@ -65,7 +65,7 @@ def SH(f0):
         else :
             dc2 = DFTc[:,t-2]
 
-        uk = (coef_1*d1) + (coef_2*((3/2)*dc1 - (1/2)*dc2))
+        uk = (coef_1*d1) - (coef_2*((3/2)*dc1 - (1/2)*dc2))
 
         DFT[:,t] = uk
         u = np.real(np.fft.ifft(np.fft.ifftshift(N*uk)))
@@ -96,11 +96,15 @@ plt.clf()
 t_range = np.arange(0,t_max, dt)
 [xx,tt]=np.meshgrid(x_range,t_range)
 plt.contourf(xx,tt, U.T)
+plt.xlabel("x")
+plt.ylabel("t")
+plt.title("Évolution sous l'équation Swift-Hohenberg \n r = {}, dt = {}, N = {}".format(r,dt,N))
 plt.colorbar()
 plt.show()
 
 
-[kk,tt]=np.meshgrid(k_range,t_range)
+"""[kk,tt]=np.meshgrid(k_range,t_range)
 plt.contourf(kk,tt, np.real(D).T)
 plt.colorbar()
 plt.show()
+"""
