@@ -1,6 +1,7 @@
 import numpy as np
-from numpy import cos, pi
+from numpy import cos, pi, exp
 import matplotlib.pyplot as plt
+import scipy.signal as scsg
 
 
 r = 0.2
@@ -8,27 +9,37 @@ L = 100
 
 
 def u_0(x):
-    return cos(2*pi*x/L) + 0.1*cos(4*pi*x/L)
+    return 1*(cos(2*pi*x/L) + 0.1*cos(4*pi*x/L))
+
+def v_0(x):
+    return (0.5 - 0.25*cos(2*pi*x/L))
+
+def w_0(x):
+    return exp(-(x-L/2)**2)
 
 def f_L(k):
-    return r - 1 - 2*((2*pi*k/L)**2) + ((2*pi*k/L)**4)
+    return r - 1 + 2*((2*pi*k/L)**2) - ((2*pi*k/L)**4)
 
 
-N = 36
+N = 1024
 dt = 0.05
 t_max = 1.01
-T = int(t_max/dt)+1
+T = int(t_max/dt) + 1
 
 x_range = np.linspace(0, L-(L/N), N)
 k_range = np.arange(-N/2,N/2,1)
 fL_range = f_L(k_range)
+plt.plot(k_range,fL_range)
+plt.show()
+plt.clf()
+
 coef_1 = (1+(fL_range*dt/2))/(1-(fL_range*dt/2))
 coef_2 = dt/(1-(fL_range*dt/2))
-"""plt.plot(k_range, coef_1, label ="coef 1")
+plt.plot(k_range, coef_1, label ="coef 1")
 plt.plot(k_range, coef_2, label ="coef 2")
 plt.legend()
 plt.show()
-plt.clf()"""
+plt.clf()
 
 
 def SH(f0):
@@ -60,6 +71,12 @@ def SH(f0):
         u = np.real(np.fft.ifft(np.fft.ifftshift(N*uk)))
         U[:,t] = u
         ukc = (1/N)*np.fft.fftshift(np.fft.fft(u**3))
+
+        """pc1 = (1/(2*pi))*np.convolve(uk,uk, mode = "same")
+        pc2 = (1/(2*pi))*np.convolve(pc1,uk, mode = "same")"""
+
+        """pc1 = (1/(2*pi))*scsg.fftconvolve(uk,uk, mode = "same")
+        pc2 = (1/(2*pi))*scsg.fftconvolve(pc1,uk, mode = "same")"""
         DFTc[:,t] = ukc
 
     return U,DFT
