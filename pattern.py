@@ -1,6 +1,7 @@
 import numpy as np
 from numpy import cos, pi, exp
 import matplotlib.pyplot as plt
+from matplotlib.colors import Colormap
 import scipy.signal as scsg
 
 
@@ -95,7 +96,7 @@ plt.clf()
 
 t_range = np.arange(0,t_max, dt)
 [xx,tt]=np.meshgrid(x_range,t_range)
-plt.contourf(xx,tt, U.T)
+plt.contourf(xx,tt, U.T, cmap = "plama", levels = 50) # cmap = "jet" dans les consignes
 plt.xlabel("x")
 plt.ylabel("t")
 plt.title("Évolution sous l'équation Swift-Hohenberg \n r = {}, dt = {}, N = {}".format(r,dt,N))
