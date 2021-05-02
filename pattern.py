@@ -98,12 +98,17 @@ def SH(f0):
     loop = 50
     #print(len(nbr_ok))
     #print(nbr_ok)
-    for j in range(len(nbr_ok)):       #J'essaye d'implémenter un test pour déterminer si on a un pattern ou non, je vois deux options une physiquement + correcte qui consiste à tester qu'on ait une
-                                       #périodicité dans l'espace de notre fonction l'autre moins juste physiquement mais officiellement plus simple à écrire qui est de calculer la différence
-                                       #entre deux itérations et si on a quelque chose qui a convergé ET qui n'est pas la valeur de champ uniforme constante du début on a un pattern.
+    for j in range(len(nbr_ok)):        # J'essaye d'implémenter un test pour déterminer si on a un pattern ou non, je vois deux options 
+                                        # une physiquement + correcte qui consiste à tester qu'on ait une périodicité dans l'espace de notre fonction 
+                                        # l'autre moins juste physiquement mais officiellement plus simple à écrire qui est de calculer la différence entre deux itérations
+                                        # et si on a quelque chose qui a convergé ET qui n'est pas la valeur de champ uniforme constante du début on a un pattern.
+                                        
+                                        # On pourrait aussi intégrer la valeur absolue de la fonction au temps final, si ça dépasse une certaine valeur à fixer 
+                                        # c'est que l'aire sous la courbe est importante et qu'il y a un pattern
+                                        # Je viens de voir ta fonction bifurcation, je vais ajouter ce à quoi je pensais comme ça on pourra en discuter
         if nbr_ok[j] == 1:
             if j+loop < T-1:
-                if nbr_ok[j+loop] == 1:
+                if nbr_ok[j+loop] == 1:     # Je ne comprends pas trop à quoi sert le loop ici, c'est une périodicité dans le temps ?
                     for i in range(loop):
                         if nbr_ok[j+i]==1:
                             pattern = True
@@ -114,8 +119,31 @@ def SH(f0):
 
 def bifurcation(U):
     u_range = U[:,0]
-    A_c = (1/L)*simps(U[:,-1]**2,u_range)
-    return A_c
+    #A_c = (1/L)*simps(U[:,-1]**2,u_range)
+    # return A_c
+    
+    # Test :
+    seuil = 0.2
+    Départ = True
+    for i in range(M):
+        A_c = (1/L)*simps(abs(U[:,i]), x_range)
+        if A_c > seuil:
+            if Départ :
+                continue
+            else :
+                print("Apparition de patterns à t = {} s".format(i*dt))
+                break
+        else :
+            if Départ :
+                Départ = False
+        if i == M-1:
+            print("Pas d'apparition de patterns avec ces paramètres.")
+    # Ça a l'air de marcher pas trop mal pour les paramètres actuels, il faut peut-être adapter le seuil
+
+
+
+
+
 
 time_ev = SH(u_0)
 U = time_ev[0]
@@ -123,7 +151,7 @@ D = time_ev[1]
 print('Apparition de motifs : {} après {}s'.format(time_ev[2],time_ev[3]))
 
 A = bifurcation(U)
-print('Calcul de A^2 = {}'.format(A))
+#print('Calcul de A^2 = {}'.format(A))
 
 plt.plot(x_range, U[:,0], label = "t = 0s")
 plt.plot(x_range, U[:,1], label = "t = {}s".format(dt))
