@@ -1,5 +1,5 @@
 import numpy as np
-from numpy import cos, pi, exp
+from numpy import cos, pi, exp, sqrt
 import matplotlib.pyplot as plt
 from matplotlib.colors import Colormap
 import scipy.signal as scsg
@@ -225,7 +225,7 @@ def rL_effect(u0, r_range, L_range):
     return time
 
 
-rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+#rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
 
 
 
@@ -239,7 +239,7 @@ rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
 def A_mesure(f0,r,L):
     N = 1024
     dt = 0.02
-    T = 150.01
+    T = 300.01
     M = int(T/dt) + 1
     h = L/N
 
@@ -285,7 +285,7 @@ def A_mesure(f0,r,L):
         ukc = (1/N)*np.fft.fftshift(np.fft.fft(u**3))
         DFTc[:,j] = ukc
     
-    A = (1/L)*simps(U[:,-1]**2, x_range)
+    A = sqrt((1/L)*simps(U[:,-1]**2, x_range))
     return A
 
 
@@ -300,10 +300,19 @@ def r_bifurcation(u0, r_range):
     plt.plot(r_range, integ)
     plt.xlabel("r")
     plt.ylabel("A")
-    plt.legend()
+    plt.show()
+    plt.clf()
+    
+    
+    integ_pos = [i for i in integ if i > 0.004]
+    r_pos = r_range[-len(integ_pos):]
+    
+    plt.plot(np.log(r_pos), np.log(integ_pos))
+    plt.xlabel("r")
+    plt.ylabel("A")
     plt.show()
     plt.clf()  
     
     return integ
 
-r_bifurcation(u_0, np.arange(-0.05,0.2,0.007))
+r_bifurcation(u_0, np.arange(0.035,0.065,0.003))
