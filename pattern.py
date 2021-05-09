@@ -296,7 +296,7 @@ def r_bifurcation(u0, r_range):
     for n,r in enumerate(r_range):
         A_ = A_mesure(u0, r, L)
         integ[n] = A_
-            
+        
     plt.plot(r_range, integ)
     plt.xlabel("r")
     plt.ylabel("A")
@@ -307,12 +307,15 @@ def r_bifurcation(u0, r_range):
     integ_pos = [i for i in integ if i > 0.004]
     r_pos = r_range[-len(integ_pos):]
     
-    plt.plot(np.log(r_pos), np.log(integ_pos))
-    plt.xlabel("r")
-    plt.ylabel("A")
+    lr_pos = np.log(r_pos)
+    lint_pos = np.log(integ_pos)
+    plt.plot(lr_pos, lint_pos)
+    plt.xlabel("ln(r)")
+    plt.ylabel("ln(A)")
     plt.show()
     plt.clf()  
+    print((lint_pos[-1]-lint_pos[0])/(lr_pos[-1] - lr_pos[0]))
     
     return integ
 
-r_bifurcation(u_0, np.arange(0.035,0.065,0.003))
+r_bifurcation(u_0, np.arange(0.035,0.045,0.001))
