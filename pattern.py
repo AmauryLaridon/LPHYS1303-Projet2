@@ -90,34 +90,44 @@ def SH(f0,r,L):
 
 
 
+    plt.plot(x_range, U[:,0], label = "t = 0s")
+    plt.plot(x_range, U[:,1], label = "t = {}s".format(dt))
+    plt.plot(x_range, U[:,int(M/4)], label = "t = {:2.2f}s".format((M/4)*dt))
+    plt.plot(x_range, U[:,-1], label = "t = {:2.2f}s".format(T))
+    plt.xlabel("x")
+    plt.ylabel("Intensité")
+    plt.title('Instantanés de l\'équation de Swift-Hohenberg\n r = {}, dt = {}, N = {}, L = {}'.format(r,dt,N,L))
+    plt.legend()
+    plt.show()
+    plt.clf()
 
-"""r = 0.2
-L = 50
+    t_range = np.arange(0,T, dt)
+    [xx,tt]=np.meshgrid(x_range,t_range)
+    plt.contourf(xx,tt, U.T, cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
+    plt.xlabel("x")
+    plt.ylabel("t")
+    plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(r,dt,N,L))
+    plt.colorbar()
+    plt.show()
+
+
+    [kk,tt]=np.meshgrid(k_range,t_range)
+    plt.contourf(kk,tt, DFT.T, cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
+    plt.xlabel("k")
+    plt.ylabel("t")
+    plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(r,dt,N,L))
+    plt.colorbar()
+    plt.show()
+
+
+    return U
+
+"""
+r = 0.2
+L = 100
 time_ev = SH(u_0,r,L)
-U = time_ev[0]
-print('Apparition de motifs après {}s'.format(time_ev[1]))
+"""
 
-
-
-plt.plot(x_range, U[:,0], label = "t = 0s")
-plt.plot(x_range, U[:,1], label = "t = {}s".format(dt))
-plt.plot(x_range, U[:,int(M/4)], label = "t = {:2.2f}s".format((M/4)*dt))
-plt.plot(x_range, U[:,-1], label = "t = {:2.2f}s".format(T))
-plt.xlabel("x")
-plt.ylabel("Intensité")
-plt.title('Instantanés de l\'équation de Swift-Hohenberg\n r = {}, dt = {}, N = {}, L = {}'.format(r,dt,N,L))
-plt.legend()
-plt.show()
-plt.clf()
-
-t_range = np.arange(0,T, dt)
-[xx,tt]=np.meshgrid(x_range,t_range)
-plt.contourf(xx,tt, U.T, cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
-plt.xlabel("x")
-plt.ylabel("t")
-plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(r,dt,N,L))
-plt.colorbar()
-plt.show()"""
 
 
 
@@ -188,7 +198,7 @@ def tl_mesure(f0,r,L):
             else :
                 t_pattern = j*dt
                 # Longueur d'onde
-                k_f = uk.tolist().index(max(uk)) + N/2
+                k_f = abs(uk.tolist().index(min(uk))) + N/36
                 lamb_f = 2*pi/k_f
 
                 break
@@ -232,6 +242,8 @@ def rL_effect(u0, r_range, L_range):
 
 
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+#r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
+L_effect(u_0, np.arange(30,200, 30))
 
 
 
