@@ -221,11 +221,64 @@ def rL_effect(u0, r_range, L_range):
     plt.colorbar()
     plt.show()
     plt.clf()    
+
+
+
+def r_effect(u0, r_range):
+    L = 100
+    time = np.zeros((len(r_range)))
+    wavelength = np.zeros((len(r_range)))
     
-    return time
+    for n,r in enumerate(r_range):
+        t_,l_ = tl_mesure(u0, r, L)
+        time[n] = t_
+        wavelength[n] = l_
+            
+    plt.plot(r_range, time)
+    plt.xlabel("$r$")
+    plt.ylabel("Temps")
+    plt.title("Temps d'apparition des motifs en fonction de $r$")
+    plt.show()
+    plt.clf()  
+      
+    plt.plot(r_range, wavelength)
+    plt.xlabel("$r$")
+    plt.ylabel("Longueur d'onde")
+    plt.title("Longueur d'onde des motifs en fonction de $r$")
+    plt.show()
+    plt.clf()  
+
+
+    
+def L_effect(u0, L_range):
+    r = 0.2
+    time = np.zeros((len(L_range)))
+    wavelength = np.zeros((len(L_range)))
+    
+    for n,l in enumerate(L_range):
+        t_,l_ = tl_mesure(u0, r, l)
+        time[n] = t_
+        wavelength[n] = l_
+            
+    plt.plot(L_range, time)
+    plt.xlabel("$L$")
+    plt.ylabel("Temps")
+    plt.title("Temps d'apparition des motifs en fonction de $L$")
+    plt.show()
+    plt.clf()  
+      
+    plt.plot(L_range, wavelength)
+    plt.xlabel("$L$")
+    plt.ylabel("Longueur d'onde")
+    plt.ylim([0,1.1*max(wavelength)])
+    plt.title("Longueur d'onde des motifs en fonction de $L$")
+    plt.show()
+    plt.clf()  
 
 
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+#r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
+L_effect(u_0, np.arange(30,200, 30))
 
 
 
@@ -318,4 +371,4 @@ def r_bifurcation(u0, r_range):
     
     return integ
 
-r_bifurcation(u_0, np.arange(0.035,0.045,0.001))
+#r_bifurcation(u_0, np.arange(0.035,0.045,0.001))
