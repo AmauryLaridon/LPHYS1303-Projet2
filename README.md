@@ -1,4 +1,4 @@
-# LPHYS1303 Simulation Numérique pour la Physique - Projet de différence finies : Les Solitons. 
+# LPHYS1303 Simulation Numérique pour la Physique - Projet de méthode spectrale : L'équation de Swift-Hohenberg. 
 ## Auteurs : Basilavecchia Augustin, Laridon Amaury
 ---
 
