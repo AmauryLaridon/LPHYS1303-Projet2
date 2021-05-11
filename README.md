@@ -8,4 +8,4 @@ Un lien Binder ainsi qu'un Notebook où se trouve la copie conforme du code est 
 ---
 Lien du Rapport du Projet Overlief : https://fr.overleaf.com/read/cxrvkyxygppp
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/AmauryLaridon/LPHYS1303-Projet1/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/AmauryLaridon/LPHYS1303-Projet2/HEAD)
