@@ -16,7 +16,7 @@ def noise_u_0(x,L):
     return 1*(cos(2*pi*x/L) + gamma*np.random.random(N)*cos(4*pi*x/L))
 
 def noise(x,L):
-    gamma = 0.1
+    gamma = 1e-4
     N = np.shape(x)[0]
     return gamma*np.random.random(N)
 
@@ -211,82 +211,82 @@ def tl_mesure(f0,r,L):
 def rL_effect(u0, r_range, L_range):
     time = np.zeros((len(r_range), len(L_range)))
     wavelength = np.zeros((len(r_range), len(L_range)))
-    
+
     for n,r in enumerate(r_range):
         for m,L in enumerate(L_range):
             t_,l_ = tl_mesure(u0, r, L)
             time[n,m] = t_
             wavelength[n,m] = l_
-            
+
     plt.imshow(time)
     plt.xlabel("L = {}".format(L_range))
     plt.ylabel("r = {}".format(r_range))
     plt.colorbar()
     plt.show()
-    plt.clf()  
-      
+    plt.clf()
+
     plt.imshow(wavelength)
     plt.xlabel("L = {}".format(L_range))
     plt.ylabel("r = {}".format(r_range))
     plt.colorbar()
     plt.show()
-    plt.clf()  
-    
-      
+    plt.clf()
+
+
 def r_effect(u0, r_range):
     L = 100
     time = np.zeros((len(r_range)))
     wavelength = np.zeros((len(r_range)))
-    
+
     for n,r in enumerate(r_range):
         t_,l_ = tl_mesure(u0, r, L)
         time[n] = t_
         wavelength[n] = l_
-            
+
     plt.plot(r_range, time)
     plt.xlabel("$r$")
     plt.ylabel("Temps")
     plt.title("Temps d'apparition des motifs en fonction de $r$")
     plt.show()
-    plt.clf()  
-      
+    plt.clf()
+
     plt.plot(r_range, wavelength)
     plt.xlabel("$r$")
     plt.ylabel("Longueur d'onde")
     plt.title("Longueur d'onde des motifs en fonction de $r$")
     plt.show()
-    plt.clf()  
-    
+    plt.clf()
+
 def L_effect(u0, L_range):
     r = 0.2
     time = np.zeros((len(L_range)))
     wavelength = np.zeros((len(L_range)))
-    
+
     for n,l in enumerate(L_range):
         t_,l_ = tl_mesure(u0, r, l)
         time[n] = t_
         wavelength[n] = l_
-            
+
     plt.plot(L_range, time)
     plt.xlabel("$L$")
     plt.ylabel("Temps")
     plt.title("Temps d'apparition des motifs en fonction de $L$")
     plt.show()
-    plt.clf()  
-      
+    plt.clf()
+
     plt.plot(L_range, wavelength)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
     plt.ylim([0,1.1*max(wavelength)])
     plt.title("Longueur d'onde des motifs en fonction de $L$")
     plt.show()
-    plt.clf()  
-    
-    
-    
+    plt.clf()
+
+
+
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
-r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
-L_effect(u_0, np.arange(30,200, 30))
+#r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
+#L_effect(u_0, np.arange(30,200, 30))
 
 
 
@@ -381,11 +381,13 @@ def r_bifurcation(u0, r_range):
 
 #r_bifurcation(u_0, np.arange(0.035,0.045,0.001))
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
-"""time_ev = SH(noise, 0.2, 100)
+
+
+time_ev = SH(noise, 0.2, 100)
 U = time_ev[0]
 x_range = time_ev[1]
 param = time_ev[2]
-
+"""
 plt.plot(x_range, U[:,0], label = "t = 0s")
 plt.plot(x_range, U[:,1], label = "t = {}s".format(param[3]))
 plt.plot(x_range, U[:,int(param[-2]/4)], label = "t = {:2.2f}s".format((param[-2]/4)*param[3]))
@@ -396,6 +398,7 @@ plt.title('Instantanés de l\'équation de Swift-Hohenberg\n r = {}, dt = {}, N 
 plt.legend()
 plt.show()
 plt.clf()
+
 
 t_range = np.arange(0,param[-3], param[3])
 [xx,tt]=np.meshgrid(x_range,t_range)
