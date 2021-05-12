@@ -20,6 +20,16 @@ def noise(x,L):
     N = np.shape(x)[0]
     return gamma*np.random.random(N)
 
+def cste(x,L):
+    X = np.full(np.shape(x)[0], 1)
+    return X
+
+def step(x,L):
+    X1 = np.full(int(np.shape(x)[0]/2), 1)
+    X2 = np.full(int(np.shape(x)[0]/2), 0)
+    X = np.concatenate((X1,X2))
+    return X
+
 def v_0(x,L):
     return (0.5 - 0.25*cos(2*pi*x/L))
 
@@ -32,7 +42,7 @@ def w_0(x,L):
 def SH(f0,r,L):
     N = 1024
     dt = 0.05
-    T = 800.01
+    T = 200.01
     M = int(T/dt) + 1
     h = L/N
 
@@ -383,7 +393,7 @@ def r_bifurcation(u0, r_range):
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
 
 
-time_ev = SH(noise, 0.2, 100)
+time_ev = SH(step, 0.2, 100)
 U = time_ev[0]
 x_range = time_ev[1]
 param = time_ev[2]
