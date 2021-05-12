@@ -299,8 +299,8 @@ def L_effect(u0, L_range):
 
 def A_mesure(f0,r,L):
     N = 1024
-    dt = 0.02
-    T = 300.01
+    dt = 0.07
+    T = 500.01
     M = int(T/dt) + 1
     h = L/N
 
@@ -365,7 +365,7 @@ def r_bifurcation(u0, r_range):
     plt.clf()
 
 
-    integ_pos = [i for i in integ if i > 0.004]
+    integ_pos = [i for i in integ if i > 0.0001]
     r_pos = r_range[-len(integ_pos):]
 
     lr_pos = np.log(r_pos)
@@ -375,19 +375,28 @@ def r_bifurcation(u0, r_range):
     plt.ylabel("ln(A)")
     plt.show()
     plt.clf()
-    print((lint_pos[-1]-lint_pos[0])/(lr_pos[-1] - lr_pos[0]))
+    
+    slope = (lint_pos[1:] - lint_pos[:-1])/(lr_pos[1:] - lr_pos[:-1])
+    plt.plot(lr_pos[:-1], slope)
+    plt.xlabel("ln(r)")
+    plt.ylabel("d/dr(ln(A))")
+    plt.show()
+    plt.clf()
 
     return integ
 
-#r_bifurcation(u_0, np.arange(0.035,0.045,0.001))
-#rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+r_bifurcation(u_0, np.arange(0.025,0.14,0.001))
 
 
+
+
+
+"""
 time_ev = SH(noise, 0.2, 100)
 U = time_ev[0]
 x_range = time_ev[1]
 param = time_ev[2]
-"""
+
 plt.plot(x_range, U[:,0], label = "t = 0s")
 plt.plot(x_range, U[:,1], label = "t = {}s".format(param[3]))
 plt.plot(x_range, U[:,int(param[-2]/4)], label = "t = {:2.2f}s".format((param[-2]/4)*param[3]))
