@@ -20,6 +20,16 @@ def noise(x,L):
     N = np.shape(x)[0]
     return gamma*np.random.random(N)
 
+def cste(x,L):
+    X = np.full(np.shape(x)[0], 1)
+    return X
+
+def step(x,L):
+    X1 = np.full(int(np.shape(x)[0]/2), 1)
+    X2 = np.full(int(np.shape(x)[0]/2), 0)
+    X = np.concatenate((X1,X2))
+    return X
+
 def v_0(x,L):
     return (0.5 - 0.25*cos(2*pi*x/L))
 
@@ -375,7 +385,7 @@ def r_bifurcation(u0, r_range):
     plt.ylabel("ln(A)")
     plt.show()
     plt.clf()
-    
+
     slope = (lint_pos[1:] - lint_pos[:-1])/(lr_pos[1:] - lr_pos[:-1])
     plt.plot(lr_pos[:-1], slope)
     plt.xlabel("ln(r)")
@@ -388,11 +398,7 @@ def r_bifurcation(u0, r_range):
 r_bifurcation(u_0, np.arange(-0.02,0.1,0.004))
 
 
-
-
-
-"""
-time_ev = SH(noise, 0.2, 100)
+time_ev = SH(step, 0.2, 100)
 U = time_ev[0]
 x_range = time_ev[1]
 param = time_ev[2]
@@ -417,4 +423,3 @@ plt.ylabel("t")
 plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(param[4],param[3],param[-1],param[0]))
 plt.colorbar()
 plt.show()
-"""
