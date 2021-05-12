@@ -16,7 +16,7 @@ def noise_u_0(x,L):
     return 1*(cos(2*pi*x/L) + gamma*np.random.random(N)*cos(4*pi*x/L))
 
 def noise(x,L):
-    gamma = 1e-30
+    gamma = 1e-4
     N = np.shape(x)[0]
     return gamma*np.random.random(N)
 
@@ -32,7 +32,7 @@ def w_0(x,L):
 def SH(f0,r,L):
     N = 1024
     dt = 0.05
-    T = 800.01
+    T = 200.01
     M = int(T/dt) + 1
     h = L/N
 
@@ -106,7 +106,7 @@ def SH(f0,r,L):
     plt.colorbar()
     plt.show()
 
-    """
+
     [kk,tt]=np.meshgrid(k_range,t_range)
     plt.contourf(kk,tt, np.abs(DFT.T), cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
     plt.xlabel("k")
@@ -114,7 +114,7 @@ def SH(f0,r,L):
     plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(r,dt,N,L))
     plt.colorbar()
     plt.show()
-    """
+
 
     return U, x_range, [L, T, h, dt, r, T, M, N]
 
