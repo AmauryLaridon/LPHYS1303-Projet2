@@ -299,8 +299,8 @@ def L_effect(u0, L_range):
 
 def A_mesure(f0,r,L):
     N = 1024
-    dt = 0.07
-    T = 500.01
+    dt = 0.03
+    T = 700.01
     M = int(T/dt) + 1
     h = L/N
 
@@ -385,7 +385,7 @@ def r_bifurcation(u0, r_range):
 
     return integ
 
-r_bifurcation(u_0, np.arange(0.025,0.14,0.001))
+r_bifurcation(u_0, np.arange(-0.02,0.1,0.004))
 
 
 
