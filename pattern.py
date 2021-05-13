@@ -206,15 +206,15 @@ def tl_mesure(f0,r,L):
                 k2 = np.array(np.where(ua == us[-2])) - N/2
                 k3 = np.array(np.where(ua == us[-3])) - N/2
                 
-                lamb_1 = 2*pi/k1
-                lamb_2 = 2*pi/k2
-                lamb_3 = 2*pi/k3
+                lamb_1 = np.max(2*pi/k1)
+                lamb_2 = np.max(2*pi/k2)
+                lamb_3 = np.max(2*pi/k3)
                 break
                 
         else :
             if Départ :
                 Départ = False
-    print(len([t_pattern, np.array([lamb_1,lamb_2,lamb_3])]))
+    
     return t_pattern, np.array([lamb_1,lamb_2,lamb_3])
 
 
@@ -310,26 +310,23 @@ def L_effect(u0, L_range):
     plt.show()
     plt.clf()
 
-    plt.plot1(L_range, wavelength1)
+    plt.plot(L_range, wavelength1)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
-    plt.ylim([0,1.1*max(wavelength1)])
     plt.title("Longueur d'onde principale des motifs en fonction de $L$")
     plt.show()
     plt.clf()
     
-    plt.plot1(L_range, wavelength2)
+    plt.plot(L_range, wavelength2)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
-    plt.ylim([0,1.1*max(wavelength2)])
     plt.title("Longueur d'onde secondaire des motifs en fonction de $L$")
     plt.show()
     plt.clf()
     
-    plt.plot1(L_range, wavelength3)
+    plt.plot(L_range, wavelength3)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
-    plt.ylim([0,1.1*max(wavelength3)])
     plt.title("Longueur d'onde tertiaire des motifs en fonction de $L$")
     plt.show()
     plt.clf()
@@ -337,8 +334,8 @@ def L_effect(u0, L_range):
 
 
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
-r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
-L_effect(u_0, np.arange(30,200, 30))
+#r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
+L_effect(u_0, np.arange(50,200, 10))
 
 
 ########################################## Ex2, mesure de A^2 et diagrame de bifurcation##############################################
