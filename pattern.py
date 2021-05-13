@@ -222,6 +222,7 @@ def rL_effect(u0, r_range, L_range):
     plt.imshow(time)
     plt.xlabel("L = {}".format(L_range))
     plt.ylabel("r = {}".format(r_range))
+    cbar = plt.colorbar()
     cbar.set_label('Temps d\'apparition t*', rotation=270)
     plt.title('Temps d\'apparition des motifs en fonction de $r$ et $L$.')
     plt.show()
