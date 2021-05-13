@@ -299,9 +299,9 @@ def L_effect(u0, L_range):
     for n,l in enumerate(L_range):
         t_,l_ = tl_mesure(u0, r, l)
         time[n] = t_
-        wavelength1[n] = l_[0]
-        wavelength2[n] = l_[1]
-        wavelength3[n] = l_[2]
+        wavelength1[n] = np.abs(l_[0])
+        wavelength2[n] = np.abs(l_[1])
+        wavelength3[n] = np.abs(l_[2])
 
     plt.plot(L_range, time)
     plt.xlabel("$L$")
@@ -335,7 +335,7 @@ def L_effect(u0, L_range):
 
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
 #r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
-L_effect(u_0, np.arange(50,200, 10))
+L_effect(u_0, np.arange(50,200, 1))
 
 
 ########################################## Ex2, mesure de A^2 et diagrame de bifurcation##############################################
@@ -395,7 +395,7 @@ def A_mesure(f0,r,L):
 
 def r_bifurcation(u0, r_range):
     integ = np.zeros((len(r_range)))
-    L = 25
+    L = 60
 
     for n,r in enumerate(r_range):
         A_ = A_mesure(u0, r, L)
@@ -428,4 +428,4 @@ def r_bifurcation(u0, r_range):
 
     return integ
 
-r_bifurcation(u_0, np.arange(-0.01,0.07,0.002))
+r_bifurcation(u_0, np.arange(-0.01,0.07,0.004))
