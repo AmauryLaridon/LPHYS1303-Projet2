@@ -6,6 +6,8 @@ import scipy.signal as scsg
 from scipy.integrate import simps
 
 
+#########################################Conditions initiales#############################################
+
 def u_0(x,L):
     gamma = 0
     return 1*(cos(2*pi*x/L) + gamma*cos(4*pi*x/L))
@@ -38,7 +40,7 @@ def w_0(x,L):
 
 
 
-########################## Ex1 partie 1u
+#########################################Ex 1 (a), Simulation de référence (Fig3)#############################################
 def SH(f0,r,L):
     N = 1024
     dt = 0.05
@@ -113,7 +115,8 @@ def SH(f0,r,L):
     plt.xlabel("x")
     plt.ylabel("t")
     plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(r,dt,N,L))
-    plt.colorbar()
+    cbar = plt.colorbar()
+    cbar.set_label('Intensité', rotation=270)
     plt.show()
 
 
@@ -122,25 +125,16 @@ def SH(f0,r,L):
     plt.xlabel("k")
     plt.ylabel("t")
     plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(r,dt,N,L))
-    plt.colorbar()
+    cbar = plt.colorbar()
+    cbar.set_label('Intensité', rotation=270)
     plt.show()
 
 
     return U, x_range, [L, T, h, dt, r, T, M, N]
 
-"""r = 0.2
-L = 100
-time_ev = SH(u_0,r,L)
-"""
+SH(u_0, 0.2, 100)
 
-
-
-
-
-
-########################## Ex1 partie 1
-
-
+##################################### Ex1 (b), mesure du temps d'apparition des motifs en fonction de r et L #########################
 
 def tl_mesure(f0,r,L):
     N = 1024
@@ -215,9 +209,6 @@ def tl_mesure(f0,r,L):
     return t_pattern, lamb_f
 
 
-
-
-
 def rL_effect(u0, r_range, L_range):
     time = np.zeros((len(r_range), len(L_range)))
     wavelength = np.zeros((len(r_range), len(L_range)))
@@ -231,14 +222,17 @@ def rL_effect(u0, r_range, L_range):
     plt.imshow(time)
     plt.xlabel("L = {}".format(L_range))
     plt.ylabel("r = {}".format(r_range))
-    plt.colorbar()
+    cbar.set_label('Temps d\'apparition t*', rotation=270)
+    plt.title('Temps d\'apparition des motifs en fonction de $r$ et $L$.')
     plt.show()
     plt.clf()
 
     plt.imshow(wavelength)
     plt.xlabel("L = {}".format(L_range))
     plt.ylabel("r = {}".format(r_range))
-    plt.colorbar()
+    cbar = plt.colorbar()
+    cbar.set_label('Intensité', rotation=270)
+    plt.title('Longueur d\'onde des motifs en fonction de $r$ et $L$.')
     plt.show()
     plt.clf()
 
@@ -294,18 +288,12 @@ def L_effect(u0, L_range):
 
 
 
-#rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
 #r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
 #L_effect(u_0, np.arange(30,200, 30))
 
 
-
-
-
-
-
-################## Ex2
-
+########################################## Ex2, mesure de A^2 et diagrame de bifurcation##############################################
 
 def A_mesure(f0,r,L):
     N = 1024
@@ -396,31 +384,3 @@ def r_bifurcation(u0, r_range):
     return integ
 
 #r_bifurcation(u_0, np.arange(-0.01,0.1,0.005))
-
-"""
-time_ev = SH(step, 0.2, 100)
-U = time_ev[0]
-x_range = time_ev[1]
-param = time_ev[2]
-"""
-plt.plot(x_range, U[:,0], label = "t = 0s")
-plt.plot(x_range, U[:,1], label = "t = {}s".format(param[3]))
-plt.plot(x_range, U[:,int(param[-2]/4)], label = "t = {:2.2f}s".format((param[-2]/4)*param[3]))
-plt.plot(x_range, U[:,-1], label = "t = {:2.2f}s".format(param[-3]))
-plt.xlabel("x")
-plt.ylabel("Intensité")
-plt.title('Instantanés de l\'équation de Swift-Hohenberg\n r = {}, dt = {}, N = {}, L = {}'.format(param[4],param[3],param[-1],param[0]))
-plt.legend()
-plt.show()
-plt.clf()
-
-
-t_range = np.arange(0,param[-3], param[3])
-[xx,tt]=np.meshgrid(x_range,t_range)
-plt.contourf(xx,tt, U.T, cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
-plt.xlabel("x")
-plt.ylabel("t")
-plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(param[4],param[3],param[-1],param[0]))
-plt.colorbar()
-plt.show()
-"""
