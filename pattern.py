@@ -395,14 +395,14 @@ def r_bifurcation(u0, r_range):
 
     return integ
 
-r_bifurcation(u_0, np.arange(0.025,0.14,0.001))
+#r_bifurcation(u_0, np.arange(0.025,0.14,0.001))
 
 
-time_ev = SH(step, 0.2, 100)
+time_ev = SH(u_0, 1.1, 100)
 U = time_ev[0]
 x_range = time_ev[1]
 param = time_ev[2]
-
+"""
 plt.plot(x_range, U[:,0], label = "t = 0s")
 plt.plot(x_range, U[:,1], label = "t = {}s".format(param[3]))
 plt.plot(x_range, U[:,int(param[-2]/4)], label = "t = {:2.2f}s".format((param[-2]/4)*param[3]))
@@ -423,3 +423,4 @@ plt.ylabel("t")
 plt.title("Simulation numérique de l'équation de Swift-Hohenberg \n r = {}, dt = {}, N = {}, L = {}".format(param[4],param[3],param[-1],param[0]))
 plt.colorbar()
 plt.show()
+"""
