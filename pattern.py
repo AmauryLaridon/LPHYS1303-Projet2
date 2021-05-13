@@ -289,7 +289,7 @@ def L_effect(u0, L_range):
 
 
 
-rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+#rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
 #r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
 #L_effect(u_0, np.arange(30,200, 30))
 
