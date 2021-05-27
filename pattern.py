@@ -243,31 +243,38 @@ def r_effect(u0, r_range):
     """Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de r"""
     L = 100
     time = np.zeros((len(r_range)))
-    wavelength = np.zeros((len(r_range)))
+    wavenb = np.zeros((len(r_range)))
 
     for n,r in enumerate(r_range):
-        t_,l_ = tl_mesure(u0, r, L)
+        t_,k_ = tl_mesure(u0, r, L)
         time[n] = t_
-        wavelength[n] = np.abs(l_)
+        wavenb[n] = np.abs(k_)
 
     plt.plot(r_range, time)
     plt.xlabel("$r$")
     plt.ylabel("Temps $t$")
-    plt.title("Temps d'apparition des motifs en fonction de $r$")
     plt.show()
     plt.clf()
     
-    plt.plot(r_range, wavelength)
+    plt.plot(r_range, wavenb)
     plt.xlabel("$r$")
     plt.ylabel("Nombre d'onde $k$")
-    plt.title("Nombre d'onde principal des motifs en fonction de $r$")
+    plt.show()
+    plt.clf()
+    
+    wavelength = np.zeros((len(r_range)))
+    for i in range(len(r_range)):
+        if wavenb[i] != 0:
+            wavelength[i] = 2*pi/wavenb[i]
+    plt.plot(r_range, wavelength)
+    plt.xlabel("$r$")
+    plt.ylabel("Longueur d'onde $\lambda$")
     plt.show()
     plt.clf()
 
-    plt.plot(r_range, wavelength, label = "$k$")
+    plt.plot(r_range, wavenb, label = "$k$")
     plt.plot(r_range, time/4, label = "$t/4$")
     plt.xlabel("$r$")
-    plt.title("Nombre d'onde principal des motifs et temps d'apparition \nen fonction de $r$")
     plt.legend()
     plt.show()
     plt.clf()
@@ -276,31 +283,34 @@ def L_effect(u0, L_range):
     """"Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de L"""
     r = 0.2
     time = np.zeros((len(L_range)))
-    wavelength = np.zeros((len(L_range)))
+    wavenb = np.zeros((len(L_range)))
 
     for n,l in enumerate(L_range):
-        t_,l_ = tl_mesure(u0, r, l)
+        t_,k_ = tl_mesure(u0, r, l)
         time[n] = t_
-        wavelength[n] = np.abs(l_)
+        wavenb[n] = np.abs(k_)
 
     plt.plot(L_range, time)
     plt.xlabel("$L$")
     plt.ylabel("Temps")
-    plt.title("Temps d'apparition des motifs en fonction de $L$")
     plt.show()
     plt.clf()
     
-    plt.plot(L_range, wavelength)
+    plt.plot(L_range, wavenb)
     plt.xlabel("$L$")
     plt.ylabel("Nombre d'onde $k$")
-    plt.title("Nombre d'onde principal des motifs en fonction de $r$")
+    plt.show()
+    plt.clf()
+    
+    plt.plot(L_range, 2*pi/wavenb)
+    plt.xlabel("$L$")
+    plt.ylabel("Longueur d'onde $\lambda$")
     plt.show()
     plt.clf()
 
-    plt.plot(L_range, wavelength, label = "$k$")
+    plt.plot(L_range, wavenb, label = "$k$")
     plt.plot(L_range, time/4, label = "$t/4$")
     plt.xlabel("$L$")
-    plt.title("Nombre d'onde principal des motifs et temps d'apparition \nen fonction de $L$")
     plt.legend()
     plt.show()
     plt.clf()
