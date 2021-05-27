@@ -9,24 +9,29 @@ from scipy.integrate import simps
 #########################################Conditions initiales#############################################
 
 def u_0(x,L):
+    """Condition initiale de référence"""
     gamma = 0
     return 1*(cos(2*pi*x/L) + gamma*cos(4*pi*x/L))
 
 def noise_u_0(x,L):
+    """Condition intiale avec un bruit aléatoire aux faibles longueurs d'onde"""
     gamma = 0.1
     N = np.shape(x)[0]
     return 1*(cos(2*pi*x/L) + gamma*np.random.random(N)*cos(4*pi*x/L))
 
 def noise(x,L):
+    """Condition initiale purement aléatoire"""
     gamma = 1e-4
     N = np.shape(x)[0]
     return gamma*np.random.random(N)
 
 def cste(x,L):
+    """Condition initiale constante"""
     X = np.full(np.shape(x)[0], 1)
     return X
 
 def step(x,L):
+    """Condition initiale d'une fonction escalier"""
     X1 = np.full(int(np.shape(x)[0]/2), 1)
     X2 = np.full(int(np.shape(x)[0]/2), 0)
     X = np.concatenate((X1,X2))
@@ -42,6 +47,7 @@ def w_0(x,L):
 
 #########################################Ex 1 (a), Simulation de référence (Fig3)#############################################
 def SH(f0,r,L):
+    """Résolution de l'équation de Swift-Hohenberg et affichage"""
     N = 1024
     dt = 0.05
     T = 200.01
@@ -56,17 +62,9 @@ def SH(f0,r,L):
     print("Paramètres numérique : L = {}, T = {}s, h = {}, k = {}, r = {}".format(L, T, h, dt, r))
 
     fL_range = r - 1 + 2*((2*pi*k_range/L)**2) - ((2*pi*k_range/L)**4)
-    """plt.plot(k_range,fL_range)
-    plt.show()
-    plt.clf()"""
 
     coef_1 = (1+(fL_range*dt/2))/(1-(fL_range*dt/2))
     coef_2 = dt/(1-(fL_range*dt/2))
-    """plt.plot(k_range, coef_1, label ="coef 1")
-    plt.plot(k_range, coef_2, label ="coef 2")
-    plt.legend()
-    plt.show()
-    plt.clf()"""
 
     u_range = f0(x_range,L)
     U = np.zeros((N,M))
@@ -137,6 +135,7 @@ def SH(f0,r,L):
 ##################################### Ex1 (b), mesure du temps d'apparition des motifs en fonction de r et L #########################
 
 def tl_mesure(f0,r,L):
+    """Mesure du temps d'apparition des motifs"""
     N = 1024
     dt = 0.05
     T = 300.01
@@ -201,24 +200,25 @@ def tl_mesure(f0,r,L):
                 us = np.unique(np.sort(ua))
                 #k_f = np.abs(ua.tolist().index(max(ua))) + N/36
                 #k_f = np.array(np.where(ua == max(ua))) - N/2
-                
+
                 k1 = np.array(np.where(ua == us[-1])) - N/2
                 k2 = np.array(np.where(ua == us[-2])) - N/2
                 k3 = np.array(np.where(ua == us[-3])) - N/2
-                
+
                 lamb_1 = np.max(2*pi/k1)
                 lamb_2 = np.max(2*pi/k2)
                 lamb_3 = np.max(2*pi/k3)
                 break
-                
+
         else :
             if Départ :
                 Départ = False
-    
+
     return t_pattern, np.array([lamb_1,lamb_2,lamb_3])
 
 
 def rL_effect(u0, r_range, L_range):
+    """Mesure du temps d'apparition des motifs pour plusieurs combinaisons de valeurs de r et L"""
     time = np.zeros((len(r_range), len(L_range)))
     wavelength = np.zeros((len(r_range), len(L_range)))
 
@@ -248,6 +248,7 @@ def rL_effect(u0, r_range, L_range):
 
 
 def r_effect(u0, r_range):
+    """Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de r"""
     L = 100
     time = np.zeros((len(r_range)))
     wavelength1 = np.zeros((len(r_range)))
@@ -274,14 +275,14 @@ def r_effect(u0, r_range):
     plt.title("Longueur d'onde principale des motifs en fonction de $r$")
     plt.show()
     plt.clf()
-    
+
     plt.plot(r_range, wavelength2)
     plt.xlabel("$r$")
     plt.ylabel("Longueur d'onde")
     plt.title("Longueur d'onde secondaire des motifs en fonction de $r$")
     plt.show()
     plt.clf()
-    
+
     plt.plot(r_range, wavelength3)
     plt.xlabel("$r$")
     plt.ylabel("Longueur d'onde")
@@ -290,6 +291,7 @@ def r_effect(u0, r_range):
     plt.clf()
 
 def L_effect(u0, L_range):
+    """"Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de L"""
     r = 0.2
     time = np.zeros((len(L_range)))
     wavelength1 = np.zeros((len(L_range)))
@@ -316,14 +318,14 @@ def L_effect(u0, L_range):
     plt.title("Longueur d'onde principale des motifs en fonction de $L$")
     plt.show()
     plt.clf()
-    
+
     plt.plot(L_range, wavelength2)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
     plt.title("Longueur d'onde secondaire des motifs en fonction de $L$")
     plt.show()
     plt.clf()
-    
+
     plt.plot(L_range, wavelength3)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
@@ -341,6 +343,7 @@ L_effect(u_0, np.arange(50,200, 1))
 ########################################## Ex2, mesure de A^2 et diagrame de bifurcation##############################################
 
 def A_mesure(f0,r,L):
+    """Calcul de A^2"""
     N = 1024
     dt = 0.02
     T = 1000.01
@@ -394,6 +397,7 @@ def A_mesure(f0,r,L):
 
 
 def r_bifurcation(u0, r_range):
+    """Construction du diagrame de bifurcation"""
     integ = np.zeros((len(r_range)))
     L = 60
 
