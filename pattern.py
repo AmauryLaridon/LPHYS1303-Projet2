@@ -190,6 +190,7 @@ def tl_mesure(f0,r,L):
             continue
 
         A_c = (1/L)*simps(abs(u), x_range)
+        k_max = 0
         if A_c > seuil:
             if Départ :
                 continue
@@ -198,13 +199,14 @@ def tl_mesure(f0,r,L):
                 # Longueur d'onde
                 ua = np.abs(uk)
                 k_max = np.min(np.abs(np.where(ua == np.max(ua)))) - N/2
+                #l_max = 2*pi/k_max
                 break
 
         else :
             if Départ :
                 Départ = False
 
-    return t_pattern, 2*pi/k_max
+    return t_pattern, k_max
 
 
 def rL_effect(u0, r_range, L_range):
@@ -257,15 +259,15 @@ def r_effect(u0, r_range):
     
     plt.plot(r_range, wavelength)
     plt.xlabel("$r$")
-    plt.ylabel("Longueur d'onde $\lambda$")
-    plt.title("Longueur d'onde principale des motifs en fonction de $r$")
+    plt.ylabel("Nombre d'onde $k$")
+    plt.title("Nombre d'onde principal des motifs en fonction de $r$")
     plt.show()
     plt.clf()
 
-    plt.plot(r_range, wavelength, label = "$\lambda$")
-    plt.plot(r_range, time/80, label = "$t/80$")
+    plt.plot(r_range, wavelength, label = "$k$")
+    plt.plot(r_range, time/4, label = "$t/4$")
     plt.xlabel("$r$")
-    plt.title("Longueur d'onde principale des motifs et temps d'apparition \nen fonction de $r$")
+    plt.title("Nombre d'onde principal des motifs et temps d'apparition \nen fonction de $r$")
     plt.legend()
     plt.show()
     plt.clf()
@@ -290,16 +292,15 @@ def L_effect(u0, L_range):
     
     plt.plot(L_range, wavelength)
     plt.xlabel("$L$")
-    plt.ylabel("Longueur d'onde")
-    plt.title("Longueur d'onde principale des motifs en fonction de $L$")
+    plt.ylabel("Nombre d'onde $k$")
+    plt.title("Nombre d'onde principal des motifs en fonction de $r$")
     plt.show()
     plt.clf()
 
-    plt.plot(L_range, wavelength, label = "$\lambda$")
-    plt.plot(L_range, time/80, label = "$t/80$")
+    plt.plot(L_range, wavelength, label = "$k$")
+    plt.plot(L_range, time/4, label = "$t/4$")
     plt.xlabel("$L$")
-    plt.ylabel("Longueur d'onde")
-    plt.title("Longueur d'onde principale des motifs et temps d'apparition \nen fonction de $L$")
+    plt.title("Nombre d'onde principal des motifs et temps d'apparition \nen fonction de $L$")
     plt.legend()
     plt.show()
     plt.clf()
