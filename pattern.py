@@ -1,8 +1,7 @@
 import numpy as np
-from numpy import cos, pi, exp, sqrt
+from numpy import cos, pi, exp, sqrt, log
 import matplotlib.pyplot as plt
 from matplotlib.colors import Colormap
-import scipy.signal as scsg
 from scipy.integrate import simps
 
 
@@ -256,28 +255,32 @@ def r_effect(u0, r_range):
     plt.show()
     plt.clf()
     
-    plt.plot(r_range, wavenb)
-    plt.xlabel("$r$")
-    plt.ylabel("Nombre d'onde $k$")
+    time2 = []
+    r2 = []
+    for i in range(len(r_range)):
+        if time[i] != 0:
+            time2.append(log(time[i]))
+            r2.append(log(r_range[i]))
+    time2 = np.array(time2)
+    r2 = np.array(r2)
+    slope = (time2[1:] - time2[:-1])/(r2[1:] - r2[:-1])
+    plt.plot(r2[1:], slope)
+    plt.xlabel("$\ln (r)$")
+    plt.ylabel("$d/d\ln r \ \ln (t)$")
+    plt.ylim([2*max(slope), 0])
     plt.show()
     plt.clf()
     
     wavelength = np.zeros((len(r_range)))
     for i in range(len(r_range)):
         if wavenb[i] != 0:
-            wavelength[i] = 2*pi/wavenb[i]
+            wavelength[i] = L/wavenb[i]
     plt.plot(r_range, wavelength)
     plt.xlabel("$r$")
-    plt.ylabel("Longueur d'onde $\lambda$")
+    plt.ylabel("Longueur d'onde $\lambda_m$")
     plt.show()
     plt.clf()
 
-    plt.plot(r_range, wavenb, label = "$k$")
-    plt.plot(r_range, time/4, label = "$t/4$")
-    plt.xlabel("$r$")
-    plt.legend()
-    plt.show()
-    plt.clf()
 
 def L_effect(u0, L_range):
     """"Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de L"""
@@ -292,25 +295,21 @@ def L_effect(u0, L_range):
 
     plt.plot(L_range, time)
     plt.xlabel("$L$")
-    plt.ylabel("Temps")
+    plt.ylabel("Temps $t$")
     plt.show()
     plt.clf()
     
-    plt.plot(L_range, wavenb)
+    plt.plot(L_range, L_range/wavenb)
     plt.xlabel("$L$")
-    plt.ylabel("Nombre d'onde $k$")
-    plt.show()
-    plt.clf()
-    
-    plt.plot(L_range, 2*pi/wavenb)
-    plt.xlabel("$L$")
-    plt.ylabel("Longueur d'onde $\lambda$")
+    plt.ylabel("Longueur d'onde $\lambda_m$")
+    plt.ylim([0, 1.7*max(L_range/wavenb)])
     plt.show()
     plt.clf()
 
-    plt.plot(L_range, wavenb, label = "$k$")
-    plt.plot(L_range, time/4, label = "$t/4$")
+    plt.plot(L_range, L_range/wavenb, label = "$\lambda_m$")
+    plt.plot(L_range, 9.53*time/L_range, label = "$t/L$")
     plt.xlabel("$L$")
+    plt.ylim([0, 1.7*max(L_range/wavenb)])
     plt.legend()
     plt.show()
     plt.clf()
