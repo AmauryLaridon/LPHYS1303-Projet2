@@ -130,7 +130,7 @@ def SH(f0,r,L):
 
     return U, x_range, [L, T, h, dt, r, T, M, N]
 
-#SH(u_0, 0.2, 100)
+#SH(u_0, 0.2, 200)
 
 ##################################### Ex1 (b), mesure du temps d'apparition des motifs en fonction de r et L #########################
 
@@ -197,24 +197,14 @@ def tl_mesure(f0,r,L):
                 t_pattern = j*dt
                 # Longueur d'onde
                 ua = np.abs(uk)
-                us = np.unique(np.sort(ua))
-                #k_f = np.abs(ua.tolist().index(max(ua))) + N/36
-                #k_f = np.array(np.where(ua == max(ua))) - N/2
-
-                k1 = np.array(np.where(ua == us[-1])) - N/2
-                k2 = np.array(np.where(ua == us[-2])) - N/2
-                k3 = np.array(np.where(ua == us[-3])) - N/2
-
-                lamb_1 = np.max(2*pi/k1)
-                lamb_2 = np.max(2*pi/k2)
-                lamb_3 = np.max(2*pi/k3)
+                k_max = np.min(np.abs(np.where(ua == np.max(ua)))) - N/2
                 break
 
         else :
             if Départ :
                 Départ = False
 
-    return t_pattern, np.array([lamb_1,lamb_2,lamb_3])
+    return t_pattern, 2*pi/k_max
 
 
 def rL_effect(u0, r_range, L_range):
@@ -251,42 +241,32 @@ def r_effect(u0, r_range):
     """Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de r"""
     L = 100
     time = np.zeros((len(r_range)))
-    wavelength1 = np.zeros((len(r_range)))
-    wavelength2 = np.zeros((len(r_range)))
-    wavelength3 = np.zeros((len(r_range)))
+    wavelength = np.zeros((len(r_range)))
 
     for n,r in enumerate(r_range):
         t_,l_ = tl_mesure(u0, r, L)
         time[n] = t_
-        wavelength1[n] = l_[0]
-        wavelength2[n] = l_[1]
-        wavelength3[n] = l_[2]
+        wavelength[n] = np.abs(l_)
 
     plt.plot(r_range, time)
     plt.xlabel("$r$")
-    plt.ylabel("Temps")
+    plt.ylabel("Temps $t$")
     plt.title("Temps d'apparition des motifs en fonction de $r$")
     plt.show()
     plt.clf()
-
-    plt.plot(r_range, wavelength1)
+    
+    plt.plot(r_range, wavelength)
     plt.xlabel("$r$")
-    plt.ylabel("Longueur d'onde")
+    plt.ylabel("Longueur d'onde $\lambda$")
     plt.title("Longueur d'onde principale des motifs en fonction de $r$")
     plt.show()
     plt.clf()
 
-    plt.plot(r_range, wavelength2)
+    plt.plot(r_range, wavelength, label = "$\lambda$")
+    plt.plot(r_range, time/80, label = "$t/80$")
     plt.xlabel("$r$")
-    plt.ylabel("Longueur d'onde")
-    plt.title("Longueur d'onde secondaire des motifs en fonction de $r$")
-    plt.show()
-    plt.clf()
-
-    plt.plot(r_range, wavelength3)
-    plt.xlabel("$r$")
-    plt.ylabel("Longueur d'onde")
-    plt.title("Longueur d'onde tertiaire des motifs en fonction de $r$")
+    plt.title("Longueur d'onde principale des motifs et temps d'apparition \nen fonction de $r$")
+    plt.legend()
     plt.show()
     plt.clf()
 
@@ -294,16 +274,12 @@ def L_effect(u0, L_range):
     """"Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de L"""
     r = 0.2
     time = np.zeros((len(L_range)))
-    wavelength1 = np.zeros((len(L_range)))
-    wavelength2 = np.zeros((len(L_range)))
-    wavelength3 = np.zeros((len(L_range)))
+    wavelength = np.zeros((len(L_range)))
 
     for n,l in enumerate(L_range):
         t_,l_ = tl_mesure(u0, r, l)
         time[n] = t_
-        wavelength1[n] = np.abs(l_[0])
-        wavelength2[n] = np.abs(l_[1])
-        wavelength3[n] = np.abs(l_[2])
+        wavelength[n] = np.abs(l_)
 
     plt.plot(L_range, time)
     plt.xlabel("$L$")
@@ -311,33 +287,28 @@ def L_effect(u0, L_range):
     plt.title("Temps d'apparition des motifs en fonction de $L$")
     plt.show()
     plt.clf()
-
-    plt.plot(L_range, wavelength1)
+    
+    plt.plot(L_range, wavelength)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
     plt.title("Longueur d'onde principale des motifs en fonction de $L$")
     plt.show()
     plt.clf()
 
-    plt.plot(L_range, wavelength2)
+    plt.plot(L_range, wavelength, label = "$\lambda$")
+    plt.plot(L_range, time/80, label = "$t/80$")
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde")
-    plt.title("Longueur d'onde secondaire des motifs en fonction de $L$")
-    plt.show()
-    plt.clf()
-
-    plt.plot(L_range, wavelength3)
-    plt.xlabel("$L$")
-    plt.ylabel("Longueur d'onde")
-    plt.title("Longueur d'onde tertiaire des motifs en fonction de $L$")
+    plt.title("Longueur d'onde principale des motifs et temps d'apparition \nen fonction de $L$")
+    plt.legend()
     plt.show()
     plt.clf()
 
 
 
 #rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
-#r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
-L_effect(u_0, np.arange(50,200, 1))
+r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
+L_effect(u_0, np.arange(50,200,2))
 
 
 ########################################## Ex2, mesure de A^2 et diagrame de bifurcation##############################################
@@ -432,4 +403,4 @@ def r_bifurcation(u0, r_range):
 
     return integ
 
-r_bifurcation(u_0, np.arange(-0.01,0.07,0.004))
+#r_bifurcation(u_0, np.arange(-0.01,0.07,0.004))
