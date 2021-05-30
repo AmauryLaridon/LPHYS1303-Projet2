@@ -5,6 +5,10 @@ from matplotlib.colors import Colormap
 from scipy.integrate import simps
 
 
+
+
+
+
 #########################################Conditions initiales#############################################
 
 def u_0(x,L):
@@ -44,7 +48,13 @@ def w_0(x,L):
 
 
 
+
+
+
+
 #########################################Ex 1 (a), Simulation de référence (Fig3)#############################################
+
+
 def SH(f0,r,L):
     """Résolution de l'équation de Swift-Hohenberg et affichage"""
     N = 1024
@@ -60,20 +70,23 @@ def SH(f0,r,L):
     print("Résolution numérique avec une grille temporelle de {} points".format(M))
     print("Paramètres numérique : L = {}, T = {}s, h = {}, k = {}, r = {}".format(L, T, h, dt, r))
 
+    # Coefficients du schéma
     fL_range = r - 1 + 2*((2*pi*k_range/L)**2) - ((2*pi*k_range/L)**4)
-
     coef_1 = (1+(fL_range*dt/2))/(1-(fL_range*dt/2))
     coef_2 = dt/(1-(fL_range*dt/2))
 
+    # Matrice u(x,t)
     u_range = f0(x_range,L)
     U = np.zeros((N,M))
     U[:,0] = u_range
 
+    # Matrice TF(u)(k,t)
     DFT_0 = (1/N)*np.fft.fftshift(np.fft.fft(u_range))
     DFT = np.zeros((N,M), dtype = complex)
     U[:,0] = u_range
     DFT[:,0] = DFT_0
-
+    
+    # Matrice TF(u^3)(k,t)
     DFTc_0 = (1/N)*np.fft.fftshift(np.fft.fft(u_range**3))
     DFTc = np.zeros((N,M), dtype = complex)
     U[:,0] = u_range
@@ -95,6 +108,7 @@ def SH(f0,r,L):
         ukc = (1/N)*np.fft.fftshift(np.fft.fft(u**3))
         DFTc[:,j] = ukc
 
+    # Graphes d'instantanés
     plt.plot(x_range, U[:,0], label = "t = 0s")
     plt.plot(x_range, U[:,1], label = "t = {}s".format(dt))
     plt.plot(x_range, U[:,int(M/4)], label = "t = {:2.2f}s".format((M/4)*dt))
@@ -106,6 +120,7 @@ def SH(f0,r,L):
     plt.show()
     plt.clf()
 
+    # Graphe de contour de u
     t_range = np.arange(0,T, dt)
     [xx,tt]=np.meshgrid(x_range,t_range)
     plt.contourf(xx,tt, U.T, cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
@@ -116,7 +131,7 @@ def SH(f0,r,L):
     cbar.set_label('Intensité', rotation=270)
     plt.show()
 
-
+    # Graphe de contour de TF(u)
     [kk,tt]=np.meshgrid(k_range,t_range)
     plt.contourf(kk,tt, np.abs(DFT.T), cmap = "plasma", levels = 100) # cmap = "jet" dans les consignes
     plt.xlabel("k")
@@ -129,12 +144,21 @@ def SH(f0,r,L):
 
     return U, x_range, [L, T, h, dt, r, T, M, N]
 
-#SH(u_0, 0.2, 200)
+if __name__ == "__main__":
+    SH(u_0, 0.2, 200)
+
+
+
+
+
+
+
 
 ##################################### Ex1 (b), mesure du temps d'apparition des motifs en fonction de r et L #########################
 
 def tl_mesure(f0,r,L):
     """Mesure du temps d'apparition des motifs"""
+    # Code similaire, mais on s'arrête dès l'apparition de motifs
     N = 1024
     dt = 0.05
     T = 300.01
@@ -238,6 +262,7 @@ def rL_effect(u0, r_range, L_range):
     plt.clf()
 
 
+
 def r_effect(u0, r_range):
     """Mesure du temps d'apparition des motifs et de leurs longueur d'onde en fonction de r"""
     L = 100
@@ -249,12 +274,14 @@ def r_effect(u0, r_range):
         time[n] = t_
         wavenb[n] = np.abs(k_)
 
+    # Temps d'apparition en fonction de r
     plt.plot(r_range, time)
     plt.xlabel("$r$")
     plt.ylabel("Temps $t$")
     plt.show()
     plt.clf()
     
+    # Pente de (d ln(t)/d ln(r)) en fonction de (ln(r))
     time2 = []
     r2 = []
     for i in range(len(r_range)):
@@ -271,6 +298,7 @@ def r_effect(u0, r_range):
     plt.show()
     plt.clf()
     
+    # Longueur d'onde en fonction de r
     wavelength = np.zeros((len(r_range)))
     for i in range(len(r_range)):
         if wavenb[i] != 0:
@@ -293,12 +321,13 @@ def L_effect(u0, L_range):
         time[n] = t_
         wavenb[n] = np.abs(k_)
 
+    # Temps d'apparition en fonction de L
     plt.plot(L_range, time)
     plt.xlabel("$L$")
     plt.ylabel("Temps $t$")
     plt.show()
     plt.clf()
-    
+    # Longueur d'onde en fonction de L
     plt.plot(L_range, L_range/wavenb)
     plt.xlabel("$L$")
     plt.ylabel("Longueur d'onde $\lambda_m$")
@@ -306,6 +335,7 @@ def L_effect(u0, L_range):
     plt.show()
     plt.clf()
 
+    # Longueur d'onde en fonction de L + t/L en fonction de L
     plt.plot(L_range, L_range/wavenb, label = "$\lambda_m$")
     plt.plot(L_range, 9.53*time/L_range, label = "$t/L$")
     plt.xlabel("$L$")
@@ -316,15 +346,20 @@ def L_effect(u0, L_range):
 
 
 
-#rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
-r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
-L_effect(u_0, np.arange(50,200,2))
+if __name__ == "__main__" :
+    rL_effect(u_0, np.arange(-0.05,0.25,0.05), [25,50,100,150,200])
+    r_effect(u_0, np.arange(-0.05, 0.25, 0.01))
+    L_effect(u_0, np.arange(50,200,2))
+
+
+
 
 
 ########################################## Ex2, mesure de A^2 et diagrame de bifurcation##############################################
 
 def A_mesure(f0,r,L):
     """Calcul de A^2"""
+    # Code similaire, mais on s'arrête dès l'apparition de motifs
     N = 1024
     dt = 0.02
     T = 1000.01
@@ -386,6 +421,7 @@ def r_bifurcation(u0, r_range):
         A_ = A_mesure(u0, r, L)
         integ[n] = A_
 
+    # Graphe de A en fonction de r
     plt.plot(r_range, integ)
     plt.xlabel("r")
     plt.ylabel("A")
@@ -395,7 +431,8 @@ def r_bifurcation(u0, r_range):
 
     integ_pos = [i for i in integ if i > 0.0001]
     r_pos = r_range[-len(integ_pos):]
-
+    
+    # Graphe de ln(A) en fonction de ln(r)
     lr_pos = np.log(r_pos)
     lint_pos = np.log(integ_pos)
     plt.plot(lr_pos, lint_pos)
@@ -404,6 +441,7 @@ def r_bifurcation(u0, r_range):
     plt.show()
     plt.clf()
 
+    # Pente de (d ln(t)/d ln(r)) en fonction de (ln(r))
     slope = (lint_pos[1:] - lint_pos[:-1])/(lr_pos[1:] - lr_pos[:-1])
     plt.plot(lr_pos[:-1], slope)
     plt.xlabel("ln(r)")
@@ -413,4 +451,9 @@ def r_bifurcation(u0, r_range):
 
     return integ
 
-#r_bifurcation(u_0, np.arange(-0.01,0.07,0.004))
+if __name__ == "__main__":
+    r_bifurcation(u_0, np.arange(-0.01,0.07,0.004))
+    
+    
+    
+    
